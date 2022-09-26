@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit - {{ file.filename }}{% endblock %}
+{% block content %}
+    {% if file %}
+        <form action="" method="POST">
+            <a href="{% url 'index' id_folder=file.locate %}" class="come_back"><i class='fa-solid fa-left-long'></i></a>
+            {% csrf_token %}
+            <h1>Edit file</h1>
+            <textarea name="file_content" id="file_content">{{ file.content }}</textarea>
+            <input type="hidden" name="file_id" value="{{ file.id }}">
+            <button type="submit">Save</button>
+        </form>
+    {% endif %}
+{% endblock %}

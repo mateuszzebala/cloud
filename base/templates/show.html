@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ file.name }}{% endblock %}
+{% block content %}
+    <div class="top_tools">
+        {% if back is not None %}
+            <a href='{% url "index" id_folder=back %}'><span class='up'><i class='fa-solid fa-left-long'></i></span></a>
+        {% elif not home %}
+            <a href='/'><span class='up'><i class='fa-solid fa-left-long'></i></span></a>
+        {% endif %}
+        <a href="{% url 'files' file_id=file.id %}" download=""><span id="download"><i class="fa-solid fa-download"></i> Download</span></a>
+        <span id="delete" class='delete_active' which="{{ file.id }}" ff="file" name="{{ file.name }}"><i class="fa-solid fa-trash"></i> Delete</span>
+        <span id="rename" class="rename_file" which="{{ file.id }}" name="{{ file.name }}"><i class="fa-solid fa-pen"></i> Rename</span>
+        {% if not file.is_binary %}
+            <a href='{% url "edit_file" file=file.id %}'><span id="delete"><i class="fa-solid fa-pen-to-square"></i> Edit</span></a>
+        {% endif %}
+
+    </div>
+    <h3 style="text-align: center; margin: 0">{{ file.name }}</h3>
+    <div class="show">
+        {% if type == 'Image' %}
+            <img class="image" src="{% url 'files' file_id=file.id %}" alt="{{ file.name }}">
+        {% elif type == 'Music' %}
+            <audio src="{% url 'files' file_id=file.id %}" alt="{{ file.name }}" controls></audio>
+        {% elif type == 'Text' %}
+            <div class="text-content">
+                <p>{{ file.html|safe }}</p>
+            </div>
+
+        {% elif type == 'Video' %}
+            <video src="{% url 'files' file_id=file.id %}" alt="{{ file.name }}" controls></video>
+        {% else %}
+            We can't read this file, sorry :(
+        {% endif %}
+
+
+
+    </div>
+    <form action="{% url 'delete' %}" method="POST" class="hidden_form" id="delete_form">
+        <h1>Remove <span id="filename"></span>?</h1>
+        <input type='hidden' value='' name='id' id="f">
+        {% csrf_token %}
+        <input type="hidden" value='' name='ff' id="ff">
+        <div>
+            <button type='button' class='cancel'>Cancel</button>
+            <button type='submit'>DELETE</button>
+        </div>
+    </form>
+    <form action='{% url "rename_file" %}' method='POST' id='rename_file' class="hidden_form">
+        <h1>Rename</h1>
+        <input type='text' autocomplete="off" name='name'>
+        <input type='hidden' value='' name='file' id="file_rename_id">
+        {% csrf_token %}
+        <div>
+            <button type='button' class='cancel'>Cancel</button>
+            <button type='submit'>OK</button>
+        </div>
+
+    </form>
+{% endblock %}

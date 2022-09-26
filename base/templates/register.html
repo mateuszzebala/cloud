@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}Register{% endblock %}
+{% block content %}
+    <form action='{% url 'register' %}' method='POST'>
+        <h1>Register</h1>
+        {% csrf_token %}
+        <input autocomplete="off" type='text' name='login' placeholder='Login'>
+        <input autocomplete="off" type="text" name="email" placeholder="E-mail">
+        <input autocomplete="off" type="text" name="first_name" placeholder="First name">
+        <input autocomplete="off" type="text" name="last_name" placeholder="Last name">
+        <input autocomplete="off" type='password' name='password1' placeholder='Password'>
+        <input autocomplete="off" type='password' name='password2' placeholder='Password again'>
+        <button type='submit'>Sign up</button>
+        <a href='{% url 'login' %}'>Sign in</a>
+    </form>
+{% endblock %}
